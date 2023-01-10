@@ -30,10 +30,10 @@ def plot_throttle_data(throttle_df, n_rows):
  
     
 def main():
- steer_df = read_steer_data()
+#  steer_df = read_steer_data()
  throttle_df = read_throttle_data()
  n_rows = -1 #2000
- plot_steer_data(steer_df, n_rows)
+#  plot_steer_data(steer_df, n_rows)
  plot_throttle_data(throttle_df, n_rows)
  
     

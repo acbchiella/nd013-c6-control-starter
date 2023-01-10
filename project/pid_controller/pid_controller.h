@@ -17,18 +17,26 @@ public:
     /*
     * Errors
     */
+    double _cte = 0.0;
+    double _cte_i = 0.0;
+    double _cte_d = 0.0;
 
     /*
     * Coefficients
     */
-
+    double _kp;
+    double _ki;
+    double _kd;
     /*
     * Output limits
     */
+    double _out_lim_max;
+    double _out_lim_min;
   
     /*
     * Delta time
     */
+    double _dt = __DBL_EPSILON__;  
 
     /*
     * Constructor
