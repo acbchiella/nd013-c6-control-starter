@@ -47,7 +47,7 @@ double PID::TotalError() {
     * The code should return a value in the interval [output_lim_mini, output_lim_maxi]
    */
    double control;
-   control = - _kp * _cte - _kd * _cte_d - _ki * _cte_i;
+   control =  _kp * _cte + _kd * _cte_d + _ki * _cte_i;
 
    return std::max(std::min(control, _out_lim_max), _out_lim_min);
 }
