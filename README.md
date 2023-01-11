@@ -113,8 +113,7 @@ Answer the following questions:
 
 
 # REPORT
-[fig1](./imgs/Figure_1.png)
-[fig2](./imgs/Figure_2.png)
-[fig3](./imgs/animation.gif)
-![Figure_2](https://user-images.githubusercontent.com/44218268/211701908-9fef4299-8429-4110-b090-0656e8fd26d3.png)
+![fig1](./imgs/Figure_1.png)
+![fig2](./imgs/Figure_2.png)
+![fig3](./imgs/animation.gif)
 
