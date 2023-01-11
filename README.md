@@ -110,9 +110,9 @@ Answer the following questions:
 - (Optional) What would you do to improve the PID controller?
 
 
-### Tips:
 
-- When you wil be testing your c++ code, restart the Carla simulator to remove the former car from the simulation.
-- If the simulation freezes on the desktop mode but is still running on the terminal, close the desktop and restart it.
-- When you will be tuning the PID parameters, try between those values:
 
+# REPORT
+[fig1](./imgs/Figure_1.png)
+[fig2](./imgs/Figure_2.png)
+[fig3](./imgs/animation.gif)
