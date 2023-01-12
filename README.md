@@ -1,10 +1,22 @@
 # Control and Trajectory Tracking for Autonomous Vehicle
 
+## Table of contents
+- [Proportional-Integral-Derivative (PID)](#proportional-integral-derivative-pid)
+- [Installation](#installation)
+- [Run Carla Simulator](#run-carla-simulator)
+- [Compile and Run the Controller](#compile-and-run-the-controller)
+- [Testing](#testing)
+- [Report](#report)
+    - [Step 1: Build the PID controller object](#step-1-build-the-pid-controller-object)
+    - [Step 2: PID controller for throttle](#step-2-pid-controller-for-throttle)
+    - [Step 3: PID controller for steer](#step-3-pid-controller-for-steer)
+    - [Step 4: Evaluate the PID efficiency](#step-4-evaluate-the-pid-efficiency)
+
 # Proportional-Integral-Derivative (PID)
 
 In this project, you will apply the skills you have acquired in this course to design a PID controller to perform vehicle trajectory tracking. Given a trajectory as an array of locations, and a simulation environment, you will design and code a PID controller and test its efficiency on the CARLA simulator used in the industry.
 
-### Installation
+## Installation
 
 Run the following commands to install the starter code in the Udacity Workspace:
 
@@ -58,49 +70,52 @@ You will design and run the a PID controller as described in the previous course
 In the directory [/pid_controller](https://github.com/udacity/nd013-c6-control-starter/tree/master/project/pid_controller)  you will find the files [pid_controller.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/pid_controller.cpp)  and [pid_controller.h](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/pid_controller.h). This is where you will code your pid controller.
 The function pid is called in [main.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/main.cpp).
 
+
+## REPORT
 ### Step 1: Build the PID controller object
-Complete the TODO in the [pid_controller.h](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/pid_controller.h) and [pid_controller.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/pid_controller.cpp).
+As the control was not instantiated, in the first step, it is not expected the car movement. Follows a screenshot of the simulator, Figure 1.
+<figure>
+<img src="./imgs/ss.png" alt="Trulli" style="width:100%">
+<figcaption align = "center">Figure 1. Simulator screenshot.</figcaption>
+</figure>
 
-Run the simulator and see in the desktop mode the car in the CARLA simulator. Take a screenshot and add it to your report. The car should not move in the simulation.
 ### Step 2: PID controller for throttle:
-1) In [main.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/main.cpp), complete the TODO (step 2) to compute the error for the throttle pid. The error is the speed difference between the actual speed and the desired speed.
+In this step, the throttle control was instantiated, as follows (the parameters are the final tunning):
+```cpp
+PID pid_throttle = PID();
+pid_throttle.Init(0.15,0.001,0.019, 1, -1);
+```
+Notice that the output of the controller is inside [-1, 1].
 
-Useful variables:
-- The last point of **v_points** vector contains the velocity computed by the path planner.
-- **velocity** contains the actual velocity.
-- The output of the controller should be inside [-1, 1].
+The speed error was computed as the difference between the actual speed and the desired speed, as follows: 
+```c++
+error_throttle = v_points[v_points.size()-1] - velocity;
+```
+Notice that the desired speed is the last point of **v_points** array.
 
-2) Comment your code to explain why did you computed the error this way.
-
-3) Tune the parameters of the pid until you get satisfying results (a perfect trajectory is not expected).
 
 ### Step 3: PID controller for steer:
-1) In [main.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/main.cpp), complete the TODO (step 3) to compute the error for the steer pid. The error is the angle difference between the actual steer and the desired steer to reach the planned position.
+In this step, the steer control was instantiated, as follows (the parameters are the final tunning):
+```cpp
+PID pid_steer = PID();
+  pid_steer.Init(0.4, 0.0012,0.8, 1.2, -1.2);
+```
+Notice that the output of the controller is inside [-1.2, 1.2].
 
-Useful variables:
-- The variable **y_points** and **x_point** gives the desired trajectory planned by the path_planner.
-- **yaw** gives the actual rotational angle of the car.
-- The output of the controller should be inside [-1.2, 1.2].
-- If needed, the position of the car is stored in the variables **x_position**, **y_position** and **z_position**
-
-2) Comment your code to explain why did you computed the error this way.
-
-3) Tune the parameters of the pid until you get satisfying results (a perfect trajectory is not expected).
+The orientation error is computed as the difference between the car's actual orientation, `yaw`, and the desired orientation, `yaw_desired`. Follows the code snipped:  
+```c++
+error_steer = angle_between_points(x_points[0], y_points[0], x_points[x_points.size()-1], y_points[y_points.size()-1]) - yaw;
+```
+The desired orientation is computed as the angle between the `x` axis and the straight line that passes by the desired position. Figure 2 illustrates the approach.
+<figure>
+<img src="./imgs/orientation.svg" alt="Trulli" style="width:100%">
+<figcaption align = "center">Figure 2. Orientation error.</figcaption>
+</figure>
 
 ### Step 4: Evaluate the PID efficiency
-The values of the error and the pid command are saved in thottle_data.txt and steer_data.txt.
-Plot the saved values using the command (in nd013-c6-control-refresh/project):
+The values of the error and the pid command are saved in steer_data.txt and thottle_data.txt, and shown in Figures 3 and 4, respectively.
 
-```
-python3 plot_pid.py
-```
 
-You might need to install a few additional python modules: 
-
-```
-pip3 install pandas
-pip3 install matplotlib
-```
 
 Answer the following questions:
 - Add the plots to your report and explain them (describe what you see)
@@ -108,12 +123,16 @@ Answer the following questions:
 - How would you design a way to automatically tune the PID parameters?
 - PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
 - (Optional) What would you do to improve the PID controller?
-
-
-
-
-# REPORT
-![fig1](./imgs/Figure_1.png)
-![fig2](./imgs/Figure_2.png)
-![fig3](./imgs/animation.gif)
+<figure>
+<img src="./imgs/Figure_1.png" alt="Trulli" style="width:100%">
+<figcaption align = "center">Figure 3. Steering control.</figcaption>
+</figure>
+<figure>
+<img src="./imgs/Figure_2.png" alt="Trulli" style="width:100%">
+<figcaption align = "center">Figure 4. Throttle control.</figcaption>
+</figure>
+<figure>
+<img src="./imgs/animation.gif" alt="Trulli" style="width:100%">
+<figcaption align = "center">Figure 5. Animation illustrating the vehicle trajectory.</figcaption>
+</figure>
 
