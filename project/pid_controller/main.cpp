@@ -299,7 +299,10 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
-          error_steer = angle_between_points(x_points[0], y_points[0], x_points[x_points.size()-1], y_points[y_points.size()-1]) - yaw;
+          double yaw_desired;
+          
+          yaw_desired = angle_between_points(x_points[0], y_points[0], x_points[x_points.size()-1], y_points[y_points.size()-1]);
+          error_steer = yaw_desired - yaw;
           /** 
            * TODO (step 3): uncomment these lines
           **/
@@ -314,7 +317,9 @@ int main ()
           }
           file_steer  << i ;
           file_steer  << " " << error_steer;
-          file_steer  << " " << steer_output << endl;
+          file_steer  << " " << steer_output;
+          file_steer  << " " << yaw;
+          file_steer  << " " << yaw_desired << endl;
 
           ////////////////////////////////////////
           // Throttle control
@@ -364,7 +369,9 @@ int main ()
           file_throttle  << i ;
           file_throttle  << " " << error_throttle;
           file_throttle  << " " << brake_output;
-          file_throttle  << " " << throttle_output << endl;
+          file_throttle  << " " << throttle_output;
+          file_throttle  << " " << velocity;
+          file_throttle  << " " << v_points[v_points.size()-1] << endl;
 
 
           // Send control
